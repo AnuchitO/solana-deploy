@@ -96,5 +96,5 @@ const sleep = (ms) => {
     console.log({ accInfo })
 
     console.log({ result: "!!!!   SUCESSS  !!!!" })
-    console.warn({ run: `"solana confirm -v ${signature}"` })
+    console.warn({ run: `solana confirm -v ${signature}` })
 })()
