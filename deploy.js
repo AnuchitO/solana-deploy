@@ -21,9 +21,6 @@ const sleep = (ms) => {
     await sleep(20000)
 
     console.log("\n#3 Create Program Account : smart contract need separate account to attach.");
-
-    const smartcontract = await fs.readFile('./solana-json.so')
-    console.log({ smartcontract })
     const programAccount = new Keypair()
     const programId = programAccount.publicKey
     console.log('Program loaded to account')
@@ -35,6 +32,8 @@ const sleep = (ms) => {
         }
     })
     console.log("\n#4 Loading Program to Account : upload smart contract using BPF LOADER ...");
+    const smartcontract = await fs.readFile('./solana-json.so')
+    console.log({ smartcontract })
     await solanaWeb3.BpfLoader.load(conn, payerAccount, programAccount, smartcontract, solanaWeb3.BPF_LOADER_PROGRAM_ID)
 
     console.log("\n#5 Create App Account : account for the app itself which will store any data required for the dApp.");
@@ -96,6 +95,6 @@ const sleep = (ms) => {
     const accInfo = Buffer.from(accountInfo?.data || "").toString().substr(4, 1000).trim();
     console.log({ accInfo })
 
-    console.log("!!!!   SUCESSS  !!!!")
-    console.warn(`run: "solana confirm -v ${signature}"`)
+    console.log({ result: "!!!!   SUCESSS  !!!!" })
+    console.warn({ run: `"solana confirm -v ${signature}"` })
 })()
