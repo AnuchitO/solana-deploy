@@ -1,5 +1,5 @@
 const solanaWeb3 = require('@solana/web3.js');
-const { Connection, PublicKey, Keypair } = solanaWeb3
+const { Connection, PublicKey, Keypair, clusterApiUrl } = solanaWeb3
 const fs = require('fs').promises;
 const BufferLayout = require('buffer-layout');
 const sleep = (ms) => {
@@ -16,7 +16,8 @@ const sleep = (ms) => {
         }
     })
     console.log("\n#2 Air drop money to Payer Account ...");
-    const conn = new Connection("https://api.devnet.solana.com")
+    const devnet = clusterApiUrl('devnet') // "https://api.devnet.solana.com"
+    const conn = new Connection(devnet)
     await conn.requestAirdrop(payerAccount.publicKey, 9000000000)
     await sleep(20000)
 
