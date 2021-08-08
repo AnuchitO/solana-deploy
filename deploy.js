@@ -1,5 +1,5 @@
-const solanaWeb3 = require('@solana/web3.js');
-const { Connection, PublicKey, Keypair, clusterApiUrl } = solanaWeb3
+const web3 = require('@solana/web3.js');
+const { Connection, PublicKey, Keypair, clusterApiUrl } = web3
 const fs = require('fs').promises;
 const BufferLayout = require('buffer-layout');
 const sleep = (ms) => {
@@ -33,9 +33,9 @@ const sleep = (ms) => {
         }
     })
     console.log("\n#4 Loading Program to Account : upload smart contract using BPF LOADER ...");
-    const smartcontract = await fs.readFile('./solana-json.so')
-    console.log({ smartcontract })
-    await solanaWeb3.BpfLoader.load(conn, payerAccount, programAccount, smartcontract, solanaWeb3.BPF_LOADER_PROGRAM_ID)
+    const program = await fs.readFile('./smartcontract.so')
+    console.log({ program })
+    await web3.BpfLoader.load(conn, payerAccount, programAccount, program, web3.BPF_LOADER_PROGRAM_ID)
 
     console.log("\n#5 Create App Account : account for the app itself which will store any data required for the dApp.");
     const appAccount = new Keypair()
@@ -51,9 +51,9 @@ const sleep = (ms) => {
     console.log("\n#6 Deploy Program to App Account : deploy smart contact for App Account");
     const space = BufferLayout.struct([BufferLayout.blob(1000, 'txt')]).span
     console.log({ space })
-    const lamports = 3000000000;
-    const transaction = new solanaWeb3.Transaction().add(
-        solanaWeb3.SystemProgram.createAccount({
+    const lamports = 2000000000;
+    const transaction = new web3.Transaction().add(
+        web3.SystemProgram.createAccount({
             fromPubkey: payerAccount.publicKey,
             newAccountPubkey: appAccount.publicKey,
             lamports,
@@ -62,7 +62,7 @@ const sleep = (ms) => {
         })
     )
 
-    await solanaWeb3.sendAndConfirmTransaction(conn, transaction, [payerAccount, appAccount], {
+    await web3.sendAndConfirmTransaction(conn, transaction, [payerAccount, appAccount], {
         commitment: 'singleGossip',
         preflightCommitment: 'singleGossip',
     })
@@ -70,14 +70,14 @@ const sleep = (ms) => {
     console.log("\n#7 Interact with smart contact : sending some data to store in dApp");
     const paddedMsg = "hello solana AnuchiO here".padEnd(1000);
     const buffer = Buffer.from(paddedMsg, 'utf8');
-    const instruction = new solanaWeb3.TransactionInstruction({
+    const instruction = new web3.TransactionInstruction({
         keys: [{ pubkey: appAccount.publicKey, isSigner: false, isWritable: true }],
         programId,
         data: buffer,
     })
-    const signature = await solanaWeb3.sendAndConfirmTransaction(
+    const signature = await web3.sendAndConfirmTransaction(
         conn,
-        new solanaWeb3.Transaction().add(instruction),
+        new web3.Transaction().add(instruction),
         [payerAccount],
         { commitment: 'singleGossip', preflightCommitment: 'singleGossip' },
     );
