@@ -4,11 +4,13 @@
   "description": "A library for storing and retrieving JSON data from the Solana blockchain",
   "main": "solana-json.js",
   "scripts": {
-    "deploy": "node ./deploy.js"
+    "deploy": "node ./deploy.js",
+    "balance": "node ./getBalance.js",
+    "keypair": "node ./keypair.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jamesbachini/Solana-JSON.git"
+    "url": "git+https://github.com/anuchito/solana-deploy.git"
   },
   "keywords": [
     "Solana",
